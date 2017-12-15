@@ -91,7 +91,7 @@ import com.palantir.atlasdb.protos.generated.TableMetadataPersistence.Expiration
 import com.palantir.atlasdb.protos.generated.TableMetadataPersistence.PartitionStrategy;
 import com.palantir.atlasdb.protos.generated.TableMetadataPersistence.SweepStrategy;
 import com.palantir.atlasdb.ptobject.EncodingUtils;
-import com.palantir.atlasdb.sweep.queue.Write;
+import com.palantir.atlasdb.sweep.queue.WriteInfo;
 import com.palantir.atlasdb.table.description.ColumnMetadataDescription;
 import com.palantir.atlasdb.table.description.NameMetadataDescription;
 import com.palantir.atlasdb.table.description.TableMetadata;
@@ -768,15 +768,15 @@ public class SnapshotTransactionTest extends AtlasDbTestCase {
 
     @Test
     public void committedWritesAreAddedToSweepQueue() {
-        List<Write> table1Writes = ImmutableList.of(
-                Write.of(Cell.create("a".getBytes(), "b".getBytes()), false, 2L),
-                Write.of(Cell.create("a".getBytes(), "c".getBytes()), false, 2L),
-                Write.of(Cell.create("a".getBytes(), "d".getBytes()), true, 2L),
-                Write.of(Cell.create("b".getBytes(), "d".getBytes()), false, 2L));
-        List<Write> table2Writes = ImmutableList.of(
-                Write.of(Cell.create("w".getBytes(), "x".getBytes()), false, 2L),
-                Write.of(Cell.create("y".getBytes(), "z".getBytes()), false, 2L),
-                Write.of(Cell.create("z".getBytes(), "z".getBytes()), true, 2L));
+        List<WriteInfo> table1Writes = ImmutableList.of(
+                WriteInfo.of(Cell.create("a".getBytes(), "b".getBytes()), false, 2L),
+                WriteInfo.of(Cell.create("a".getBytes(), "c".getBytes()), false, 2L),
+                WriteInfo.of(Cell.create("a".getBytes(), "d".getBytes()), true, 2L),
+                WriteInfo.of(Cell.create("b".getBytes(), "d".getBytes()), false, 2L));
+        List<WriteInfo> table2Writes = ImmutableList.of(
+                WriteInfo.of(Cell.create("w".getBytes(), "x".getBytes()), false, 2L),
+                WriteInfo.of(Cell.create("y".getBytes(), "z".getBytes()), false, 2L),
+                WriteInfo.of(Cell.create("z".getBytes(), "z".getBytes()), true, 2L));
 
         AtomicLong startTs = new AtomicLong(0);
         txManager.runTaskWithRetry(txn -> {
@@ -793,7 +793,7 @@ public class SnapshotTransactionTest extends AtlasDbTestCase {
         verify(sweepQueue).enqueue(eq(TABLE2), eq(table2Writes));
     }
 
-    private void put(Transaction txn, TableReference table, Write write) {
+    private void put(Transaction txn, TableReference table, WriteInfo write) {
         if (write.isTombstone()) {
             txn.delete(table, ImmutableSet.of(write.cell()));
         } else {
