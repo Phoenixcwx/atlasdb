@@ -21,16 +21,16 @@ import java.util.function.LongSupplier;
 import com.palantir.atlasdb.sweep.Sweeper;
 import com.palantir.atlasdb.transaction.api.TransactionManager;
 
-public class SweepTimestamps {
+public class SweepTimestampProvider {
 
     private final LongSupplier immutableTimestamp;
     private final LongSupplier unreadableTimestamp;
 
-    public static SweepTimestamps create(TransactionManager txnManager) {
-        return new SweepTimestamps(txnManager::getImmutableTimestamp, txnManager::getUnreadableTimestamp);
+    public static SweepTimestampProvider create(TransactionManager txnManager) {
+        return new SweepTimestampProvider(txnManager::getImmutableTimestamp, txnManager::getUnreadableTimestamp);
     }
 
-    public SweepTimestamps(LongSupplier immutableTimestamp, LongSupplier unreadableTimestamp) {
+    public SweepTimestampProvider(LongSupplier immutableTimestamp, LongSupplier unreadableTimestamp) {
         this.immutableTimestamp = immutableTimestamp;
         this.unreadableTimestamp = unreadableTimestamp;
     }

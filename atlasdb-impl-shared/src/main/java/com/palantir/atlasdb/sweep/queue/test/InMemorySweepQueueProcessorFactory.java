@@ -27,21 +27,21 @@ import com.palantir.atlasdb.sweep.Sweeper;
 import com.palantir.atlasdb.sweep.queue.SweepDeleter;
 import com.palantir.atlasdb.sweep.queue.SweepDeleterImpl;
 import com.palantir.atlasdb.sweep.queue.SweepQueueProcessor;
-import com.palantir.atlasdb.sweep.queue.SweepTimestamps;
+import com.palantir.atlasdb.sweep.queue.SweepTimestampProvider;
 import com.palantir.atlasdb.transaction.impl.SweepStrategyManager;
 
 public class InMemorySweepQueueProcessorFactory {
 
     private final KeyValueService kvs;
     private final SweepStrategyManager sweepStrategyManager;
-    private final SweepTimestamps sweepTimestamps;
+    private final SweepTimestampProvider sweepTimestamps;
 
     private final Map<TableReference, SweepQueueProcessor> processorsByTable = Maps.newConcurrentMap();
 
     public InMemorySweepQueueProcessorFactory(
             KeyValueService kvs,
             SweepStrategyManager sweepStrategyManager,
-            SweepTimestamps sweepTimestamps) {
+            SweepTimestampProvider sweepTimestamps) {
         this.kvs = kvs;
         this.sweepStrategyManager = sweepStrategyManager;
         this.sweepTimestamps = sweepTimestamps;

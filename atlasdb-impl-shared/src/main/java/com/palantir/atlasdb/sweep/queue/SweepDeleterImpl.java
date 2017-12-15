@@ -39,7 +39,7 @@ public class SweepDeleterImpl implements SweepDeleter {
 
     @Override
     public void sweep(Collection<WriteInfo> writes) {
-        Map<Cell, Long> maxTimestampByCell = getMaxDeletionTimestampForEachCell(writes);
+        Map<Cell, Long> maxTimestampByCell = getMaxDeletionTimestamps(writes);
 
         if (sweeper.shouldAddSentinels()) {
             kvs.addGarbageCollectionSentinelValues(table, maxTimestampByCell.keySet());
@@ -48,7 +48,7 @@ public class SweepDeleterImpl implements SweepDeleter {
         kvs.deleteAllTimestamps(table, maxTimestampByCell);
     }
 
-    private Map<Cell, Long> getMaxDeletionTimestampForEachCell(Collection<WriteInfo> writes) {
+    private Map<Cell, Long> getMaxDeletionTimestamps(Collection<WriteInfo> writes) {
         Map<Cell, Long> deleteTimestampByCell = Maps.newHashMap();
 
         for (WriteInfo write : writes) {

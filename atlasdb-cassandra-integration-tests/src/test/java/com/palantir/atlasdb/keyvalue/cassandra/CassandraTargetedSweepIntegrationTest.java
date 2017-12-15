@@ -32,13 +32,13 @@ import com.palantir.atlasdb.keyvalue.api.SweepResults;
 import com.palantir.atlasdb.keyvalue.api.TableReference;
 import com.palantir.atlasdb.sweep.AbstractSweepTest;
 import com.palantir.atlasdb.sweep.queue.BackgroundSweepQueueProcessor;
-import com.palantir.atlasdb.sweep.queue.SweepTimestamps;
+import com.palantir.atlasdb.sweep.queue.SweepTimestampProvider;
 import com.palantir.atlasdb.sweep.queue.test.InMemorySweepQueue;
 import com.palantir.atlasdb.sweep.queue.test.InMemorySweepQueueProcessorFactory;
 
 public class CassandraTargetedSweepIntegrationTest extends AbstractSweepTest {
 
-    private SweepTimestamps timestamps = mock(SweepTimestamps.class);
+    private SweepTimestampProvider timestamps = mock(SweepTimestampProvider.class);
     private BackgroundSweepQueueProcessor processor;
 
     @Before
